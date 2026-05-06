@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PLEXMAX 2024</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Montserrat',sans-serif;
+}
+
+body{
+background:#050505;
+color:white;
+overflow-x:hidden;
+}
+
+.hero{
+min-height:100vh;
+padding:40px 6%;
+background:
+linear-gradient(rgba(0,0,0,.65),rgba(0,0,0,.92)),
+url('https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?q=80&w=1800&auto=format&fit=crop');
+background-size:cover;
+background-position:center;
+position:relative;
+}
+
+.hero::before{
+content:'';
+position:absolute;
+inset:0;
+background:
+linear-gradient(90deg,
+rgba(0,0,0,.85) 0%,
+rgba(0,0,0,.35) 50%,
+rgba(0,0,0,.85) 100%);
+}
+
+.hero-content{
+position:relative;
+z-index:2;
+max-width:1400px;
+margin:auto;
+}
+
+.topbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:80px;
+}
+
+.logo{
+font-size:52px;
+font-weight:900;
+letter-spacing:2px;
+}
+
+.logo span{
+color:#ffb000;
+}
+
+.channel-btn{
+padding:16px 28px;
+background:#ffb000;
+color:black;
+font-weight:800;
+border-radius:14px;
+text-decoration:none;
+box-shadow:0 0 30px rgba(255,176,0,.35);
+}
+
+.hero-grid{
+display:grid;
+grid-template-columns:1.2fr .8fr;
+gap:50px;
+align-items:center;
+}
+
+.main-title{
+font-size:110px;
+font-weight:900;
+line-height:0.95;
+margin-bottom:25px;
+}
+
+.main-title span{
+color:#ffb000;
+}
+
+.description{
+font-size:24px;
+line-height:1.6;
+color:#ddd;
+max-width:760px;
+margin-bottom:40px;
+}
+
+.tags{
+display:flex;
+flex-wrap:wrap;
+gap:14px;
+margin-bottom:45px;
+}
+
+.tag{
+padding:12px 20px;
+border:1px solid rgba(255,176,0,.35);
+background:rgba(255,255,255,.05);
+backdrop-filter:blur(10px);
+border-radius:40px;
+font-weight:700;
+}
+
+.buttons{
+display:flex;
+gap:20px;
+flex-wrap:wrap;
+}
+
+.primary-btn{
+padding:20px 38px;
+background:#ffb000;
+color:black;
+font-weight:900;
+font-size:18px;
+text-decoration:none;
+border-radius:16px;
+box-shadow:0 0 35px rgba(255,176,0,.35);
+}
+
+.secondary-btn{
+padding:20px 38px;
+border:1px solid rgba(255,255,255,.2);
+background:rgba(255,255,255,.05);
+backdrop-filter:blur(12px);
+color:white;
+font-weight:800;
+text-decoration:none;
+border-radius:16px;
+}
+
+.poster-wall{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:18px;
+}
+
+.poster{
+height:320px;
+border-radius:22px;
+background-size:cover;
+background-position:center;
+box-shadow:0 0 30px rgba(0,0,0,.45);
+transition:.3s;
+}
+
+.poster:hover{
+transform:translateY(-8px) scale(1.02);
+}
+
+.poster:nth-child(1){
+background-image:url('https://images.unsplash.com/photo-1608170825938-a8ea0305d46c?q=80&w=900&auto=format&fit=crop');
+}
+
+.poster:nth-child(2){
+background-image:url('https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?q=80&w=900&auto=format&fit=crop');
+}
+
+.poster:nth-child(3){
+background-image:url('https://images.unsplash.com/photo-1536440136628-849c177e76a1?q=80&w=900&auto=format&fit=crop');
+}
+
+.poster:nth-child(4){
+background-image:url('https://images.unsplash.com/photo-1513106580091-1d82408b8cd6?q=80&w=900&auto=format&fit=crop');
+}
+
+.poster:nth-child(5){
+background-image:url('https://images.unsplash.com/photo-1542204165-65bf26472b9b?q=80&w=900&auto=format&fit=crop');
+}
+
+.poster:nth-child(6){
+background-image:url('https://images.unsplash.com/photo-1516280440614-37939bbacd81?q=80&w=900&auto=format&fit=crop');
+}
+
+.stats{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:20px;
+padding:60px 6%;
+background:#080808;
+}
+
+.stat-card{
+background:#111;
+padding:30px;
+border-radius:24px;
+text-align:center;
+border:1px solid rgba(255,176,0,.12);
+}
+
+.stat-number{
+font-size:48px;
+font-weight:900;
+color:#ffb000;
+margin-bottom:12px;
+}
+
+.stat-label{
+color:#ccc;
+font-size:18px;
+}
+
+.section{
+padding:90px 6%;
+}
+
+.section-title{
+font-size:58px;
+font-weight:900;
+text-align:center;
+margin-bottom:60px;
+}
+
+.section-title span{
+color:#ffb000;
+}
+
+.cards{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:28px;
+}
+
+.card{
+background:#111;
+border-radius:28px;
+overflow:hidden;
+border:1px solid rgba(255,176,0,.12);
+transition:.3s;
+}
+
+.card:hover{
+transform:translateY(-8px);
+}
+
+.card-image{
+height:260px;
+background-size:cover;
+background-position:center;
+}
+
+.card-content{
+padding:28px;
+}
+
+.card-title{
+font-size:28px;
+font-weight:800;
+margin-bottom:14px;
+color:#ffb000;
+}
+
+.card-text{
+color:#ccc;
+line-height:1.7;
+font-size:16px;
+}
+
+.request-box{
+margin-top:90px;
+background:#101010;
+border-radius:36px;
+padding:50px;
+max-width:1100px;
+margin-left:auto;
+margin-right:auto;
+}
+
+.request-box h2{
+font-size:46px;
+margin-bottom:18px;
+text-align:center;
+}
+
+.request-box p{
+text-align:center;
+color:#bbb;
+margin-bottom:40px;
+font-size:18px;
+}
+
+input,textarea{
+width:100%;
+padding:20px;
+margin-bottom:20px;
+background:#060606;
+border:1px solid rgba(255,255,255,.08);
+color:white;
+border-radius:18px;
+font-size:16px;
+}
+
+textarea{
+height:170px;
+resize:none;
+}
+
+.submit-btn{
+width:100%;
+padding:22px;
+background:#ffb000;
+border:none;
+border-radius:18px;
+font-size:20px;
+font-weight:900;
+cursor:pointer;
+}
+
+footer{
+padding:40px;
+text-align:center;
+color:#777;
+background:#050505;
+}
+
+@media(max-width:1100px){
+.hero-grid,
+.cards,
+.stats{
+grid-template-columns:1fr;
+}
+
+.poster-wall{
+grid-template-columns:repeat(2,1fr);
+}
+
+.main-title{
+font-size:68px;
+}
+
+.section-title{
+font-size:42px;
+}
+}
+
+@media(max-width:700px){
+.hero{
+min-height:auto;
+padding:40px 20px 70px;
+background-position:center top;
+}
+
+.hero::before{
+background:linear-gradient(rgba(0,0,0,.55),rgba(0,0,0,.92));
+}
+
+.hero-grid{
+gap:35px;
+}
+
+.poster-wall{
+grid-template-columns:1fr 1fr;
+}
+
+.poster{
+height:180px;
+}
+
+.main-title{
+font-size:48px;
+}
+
+.description{
+font-size:18px;
+}
+
+.topbar{
+flex-direction:column;
+gap:20px;
+}
+}
+</style>
+</head>
+<body>
+
+<div class="hero">
+<div class="hero-content">
+
+<div class="topbar">
+<div class="logo">PLEX<span>MAX</span></div>
+
+<a class="channel-btn" href="https://whatsapp.com/channel/0029VaGY5jiJP2120RRuUD3M" target="_blank">
+CANAL WHATSAPP
+</a>
+</div>
+
+<div class="hero-grid">
+
+<div>
+<h1 class="main-title">
+TU <span>STREAMING</span><br>
+DEFINITIVO
+</h1>
+
+<p class="description">
+Más de miles de películas, series, anime, documentales y estrenos diarios.
+Disfruta de contenido premium desde cualquier dispositivo.
+</p>
+
+<div class="tags">
+<div class="tag">PELÍCULAS</div>
+<div class="tag">SERIES</div>
+<div class="tag">ANIME</div>
+<div class="tag">DOCUMENTALES</div>
+<div class="tag">ESTRENOS</div>
+</div>
+
+<div class="buttons">
+<a href="#solicitudes" class="primary-btn">SOLICITAR CONTENIDO</a>
+<a href="#novedades" class="secondary-btn">VER NOVEDADES</a>
+</div>
+</div>
+
+<div class="poster-wall">
+<div class="poster"></div>
+<div class="poster"></div>
+<div class="poster"></div>
+<div class="poster"></div>
+<div class="poster"></div>
+<div class="poster"></div>
+</div>
+
+</div>
+</div>
+</div>
+
+<div class="stats">
+<div class="stat-card">
+<div class="stat-number">6000+</div>
+<div class="stat-label">Películas</div>
+</div>
+
+<div class="stat-card">
+<div class="stat-number">1500+</div>
+<div class="stat-label">Series</div>
+</div>
+
+<div class="stat-card">
+<div class="stat-number">24/7</div>
+<div class="stat-label">Soporte</div>
+</div>
+
+<div class="stat-card">
+<div class="stat-number">FULL HD</div>
+<div class="stat-label">Máxima calidad</div>
+</div>
+</div>
+
+<div class="section">
+<h2 class="section-title" id="novedades">ÚLTIMAS <span>NOVEDADES</span></h2>
+
+<div class="cards">
+
+<div class="card">
+<div class="card-image" style="background-image:url('https://images.unsplash.com/photo-1608889825271-9696289cf2aa?q=80&w=1200&auto=format&fit=crop')"></div>
+<div class="card-content">
+<div class="card-title">Oscar Shaw</div>
+<div class="card-text">
+Nueva película añadida recientemente al catálogo.
+</div>
+</div>
+</div>
+
+<div class="card">
+<div class="card-image" style="background-image:url('https://images.unsplash.com/photo-1524985069026-dd778a71c7b4?q=80&w=1200&auto=format&fit=crop')"></div>
+<div class="card-content">
+<div class="card-title">Depredador dominante</div>
+<div class="card-text">
+Estreno disponible para todos los usuarios.
+</div>
+</div>
+</div>
+
+<div class="card">
+<div class="card-image" style="background-image:url('https://images.unsplash.com/photo-1485846234645-a62644f84728?q=80&w=1200&auto=format&fit=crop')"></div>
+<div class="card-content">
+<div class="card-title">Ídolos</div>
+<div class="card-text">
+Nueva incorporación destacada esta semana.
+</div>
+</div>
+</div>
+
+</div>
+
+<div class="request-box" id="solicitudes">
+<h2>🎬 Solicitar contenido</h2>
+
+<p>
+¿No encuentras una película o serie? Pídela y la añadiremos lo antes posible.
+</p>
+
+<form id="plexForm">
+<textarea id="contenido" placeholder="Escribe la película o serie que quieres..." required></textarea>
+
+<input type="text" id="usuario" placeholder="Tu nombre" required>
+
+<button class="submit-btn" type="submit">
+ENVIAR SOLICITUD
+</button>
+</form>
+</div>
+</div>
+
+<footer>
+© 2026 PLEXMAX 2024 · Plataforma Premium
+</footer>
+
+<script>
+document.getElementById('plexForm').addEventListener('submit', async function(e){
+e.preventDefault();
+
+const contenido=document.getElementById('contenido').value;
+const usuario=document.getElementById('usuario').value;
+
+const formData=new FormData();
+formData.append('entry.85519895',contenido);
+formData.append('entry.160243918',usuario);
+
+await fetch('https://docs.google.com/forms/d/e/1FAIpQLSexqG8wynWrNlUAhBH4UBH7MOmjUKk5XYc5e8Dyhf0EzVH0yQ/formResponse',{
+method:'POST',
+mode:'no-cors',
+body:formData
+});
+
+alert('Solicitud enviada correctamente');
+
+document.getElementById('plexForm').reset();
+});
+</script>
+
+</body>
+</html>
