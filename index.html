@@ -564,6 +564,75 @@ max-width:100%;
 
 }
 
+
+.admin-toggle{
+position:fixed;
+bottom:20px;
+left:20px;
+z-index:9999;
+background:#ffb000;
+color:black;
+border:none;
+padding:14px 18px;
+border-radius:14px;
+font-weight:800;
+cursor:pointer;
+box-shadow:0 0 20px rgba(255,176,0,.3);
+}
+
+.admin-panel{
+position:fixed;
+top:0;
+right:-420px;
+width:420px;
+max-width:100%;
+height:100vh;
+background:#0d0d0d;
+border-left:2px solid rgba(255,176,0,.3);
+z-index:99999;
+overflow:auto;
+padding:25px;
+transition:.4s;
+}
+
+.admin-panel.active{
+right:0;
+}
+
+.admin-panel h2{
+margin-bottom:20px;
+color:#ffb000;
+}
+
+.admin-panel textarea{
+width:100%;
+height:140px;
+margin-bottom:20px;
+background:#151515;
+color:white;
+border:1px solid rgba(255,255,255,.08);
+border-radius:14px;
+padding:15px;
+}
+
+.save-btn{
+width:100%;
+padding:18px;
+background:#ffb000;
+border:none;
+border-radius:14px;
+font-weight:900;
+cursor:pointer;
+font-size:16px;
+}
+
+.admin-help{
+font-size:13px;
+color:#bbb;
+margin-bottom:15px;
+line-height:1.5;
+}
+
 </style>
 </head>
 
@@ -776,7 +845,7 @@ document.getElementById('plexForm').reset();
 
 <script>
 
-const topMovies = [
+let topMovies = [
 {title:"Oppenheimer",desc:"Película más vista",img:"https://picsum.photos/200/300?random=11"},
 {title:"Dune Parte 2",desc:"Top ciencia ficción",img:"https://picsum.photos/200/300?random=12"},
 {title:"John Wick 4",desc:"Acción total",img:"https://picsum.photos/200/300?random=13"},
@@ -784,7 +853,7 @@ const topMovies = [
 {title:"Gladiator II",desc:"Muy recomendada",img:"https://picsum.photos/200/300?random=15"},
 ];
 
-const topSeries = [
+let topSeries = [
 {title:"The Last of Us",desc:"Serie más vista",img:"https://picsum.photos/200/300?random=16"},
 {title:"Fallout",desc:"Top estreno",img:"https://picsum.photos/200/300?random=17"},
 {title:"From",desc:"Suspense total",img:"https://picsum.photos/200/300?random=18"},
@@ -792,7 +861,7 @@ const topSeries = [
 {title:"House of the Dragon",desc:"Fantástica",img:"https://picsum.photos/200/300?random=20"},
 ];
 
-const newMovies = [
+let newMovies = [
 {title:"Avatar 3",desc:"Nueva incorporación",img:"https://picsum.photos/200/300?random=21"},
 {title:"Fast X",desc:"Disponible ahora",img:"https://picsum.photos/200/300?random=22"},
 {title:"Joker 2",desc:"Último estreno",img:"https://picsum.photos/200/300?random=23"},
@@ -800,7 +869,7 @@ const newMovies = [
 {title:"Misión Imposible",desc:"Nueva película",img:"https://picsum.photos/200/300?random=25"},
 ];
 
-const newSeries = [
+let newSeries = [
 {title:"Wednesday",desc:"Nueva temporada",img:"https://picsum.photos/200/300?random=26"},
 {title:"FBI",desc:"Nueva serie",img:"https://picsum.photos/200/300?random=27"},
 {title:"Peaky Blinders",desc:"Serie añadida",img:"https://picsum.photos/200/300?random=28"},
@@ -828,6 +897,147 @@ renderList("topMovies", topMovies);
 renderList("topSeries", topSeries);
 renderList("newMovies", newMovies);
 renderList("newSeries", newSeries);
+
+</script>
+
+
+<button class="admin-toggle" onclick="toggleAdmin()">
+⚙️ ADMIN
+</button>
+
+<div class="admin-panel" id="adminPanel">
+
+<h2>Panel administrador</h2>
+
+<div class="admin-help">
+Formato:<br>
+Titulo | Descripción | URL Imagen
+</div>
+
+<h3>🎬 TOP Películas</h3>
+<textarea id="editTopMovies"></textarea>
+
+<h3>📺 TOP Series</h3>
+<textarea id="editTopSeries"></textarea>
+
+<h3>🔥 Nuevas Películas</h3>
+<textarea id="editNewMovies"></textarea>
+
+<h3>⭐ Nuevas Series</h3>
+<textarea id="editNewSeries"></textarea>
+
+<button class="save-btn" onclick="saveContent()">
+GUARDAR CAMBIOS
+</button>
+
+</div>
+
+
+<script>
+
+function toggleAdmin(){
+document.getElementById('adminPanel').classList.toggle('active');
+}
+
+function listToText(data){
+return data.map(item =>
+`${item.title} | ${item.desc} | ${item.img}`
+).join('\n');
+}
+
+function textToList(text){
+return text.split('\n').filter(Boolean).map(line=>{
+const parts = line.split('|');
+
+return{
+title:(parts[0]||'').trim(),
+desc:(parts[1]||'').trim(),
+img:(parts[2]||'https://picsum.photos/200/300').trim()
+};
+});
+}
+
+function refreshLists(){
+
+document.getElementById("topMovies").innerHTML='';
+document.getElementById("topSeries").innerHTML='';
+document.getElementById("newMovies").innerHTML='';
+document.getElementById("newSeries").innerHTML='';
+
+renderList("topMovies", topMovies);
+renderList("topSeries", topSeries);
+renderList("newMovies", newMovies);
+renderList("newSeries", newSeries);
+
+}
+
+document.getElementById('editTopMovies').value = listToText(topMovies);
+document.getElementById('editTopSeries').value = listToText(topSeries);
+document.getElementById('editNewMovies').value = listToText(newMovies);
+document.getElementById('editNewSeries').value = listToText(newSeries);
+
+function saveContent(){
+
+localStorage.setItem('topMovies',
+document.getElementById('editTopMovies').value);
+
+localStorage.setItem('topSeries',
+document.getElementById('editTopSeries').value);
+
+localStorage.setItem('newMovies',
+document.getElementById('editNewMovies').value);
+
+localStorage.setItem('newSeries',
+document.getElementById('editNewSeries').value);
+
+topMovies = textToList(
+document.getElementById('editTopMovies').value
+);
+
+topSeries = textToList(
+document.getElementById('editTopSeries').value
+);
+
+newMovies = textToList(
+document.getElementById('editNewMovies').value
+);
+
+newSeries = textToList(
+document.getElementById('editNewSeries').value
+);
+
+refreshLists();
+
+alert('Contenido actualizado correctamente');
+
+}
+
+window.addEventListener('load', ()=>{
+
+if(localStorage.getItem('topMovies')){
+topMovies = textToList(localStorage.getItem('topMovies'));
+}
+
+if(localStorage.getItem('topSeries')){
+topSeries = textToList(localStorage.getItem('topSeries'));
+}
+
+if(localStorage.getItem('newMovies')){
+newMovies = textToList(localStorage.getItem('newMovies'));
+}
+
+if(localStorage.getItem('newSeries')){
+newSeries = textToList(localStorage.getItem('newSeries'));
+}
+
+refreshLists();
+
+document.getElementById('editTopMovies').value = listToText(topMovies);
+document.getElementById('editTopSeries').value = listToText(topSeries);
+document.getElementById('editNewMovies').value = listToText(newMovies);
+document.getElementById('editNewSeries').value = listToText(newSeries);
+
+});
 
 </script>
 
