@@ -883,29 +883,11 @@ const container = document.getElementById(id);
 data.forEach(item=>{
 container.innerHTML += `
 <div class="top-item">
-
-<div style="
-min-width:42px;
-height:42px;
-border-radius:50%;
-background:#ffb000;
-color:black;
-display:flex;
-align-items:center;
-justify-content:center;
-font-weight:900;
-font-size:18px;
-">
-${index + 1}
-</div>
-
 <img src="${item.img}">
-
 <div>
 <h4>${item.title}</h4>
 <p>${item.desc}</p>
 </div>
-
 </div>
 `;
 });
@@ -919,553 +901,145 @@ renderList("newSeries", newSeries);
 </script>
 
 
-
-
-
-<script>
-
-// ========= PLEXMAX AUTO SYNC =========
-
-window.addEventListener('load', ()=>{
-
-const savedData = localStorage.getItem('plexmax_data');
-
-if(!savedData) return;
-
-const data = JSON.parse(savedData);
-
-function renderSync(id,items){
-
-const el = document.getElementById(id);
-
-if(!el) return;
-
-el.innerHTML='';
-
-items.forEach(item=>{
-
-el.innerHTML += `
-<div class="top-item">
-<img src="${item.img}">
-<div>
-<h4>${item.title}</h4>
-<p>${item.desc}</p>
-</div>
-</div>
-`;
-
-});
-
-}
-
-renderSync('topMovies', data.topMovies || []);
-renderSync('topSeries', data.topSeries || []);
-renderSync('newMovies', data.newMovies || []);
-renderSync('newSeries', data.newSeries || []);
-
-});
-
-// ========= FIN =========
-
-</script>
-
-
-
-<style>
-
-.admin-toggle{
-position:fixed;
-top:15px;
-right:15px;
-width:44px;
-height:44px;
-background:rgba(0,0,0,.75);
-color:#ffb000;
-border:1px solid rgba(255,176,0,.25);
-border-radius:50%;
-font-size:22px;
-font-weight:900;
-cursor:pointer;
-z-index:9999;
-display:flex;
-align-items:center;
-justify-content:center;
-backdrop-filter:blur(10px);
-box-shadow:0 0 20px rgba(0,0,0,.4);
-transition:.3s;
-}
-
-.admin-toggle:hover{
-transform:scale(1.08);
-background:#ffb000;
-color:black;
-}
-
-.admin-panel{
-display:none;
-position:fixed;
-top:0;
-right:0;
-width:420px;
-max-width:100%;
-height:100vh;
-overflow:auto;
-background:#111;
-padding:25px;
-z-index:99999;
-border-left:2px solid rgba(255,176,0,.3);
-}
-
-.admin-panel h2{
-color:#ffb000;
-margin-bottom:20px;
-}
-
-.admin-section{
-background:#1a1a1a;
-padding:18px;
-border-radius:18px;
-margin-bottom:25px;
-}
-
-.admin-section h3{
-margin-bottom:15px;
-color:#ffb000;
-}
-
-.admin-panel input{
-width:100%;
-padding:14px;
-margin-bottom:12px;
-background:#222;
-border:none;
-border-radius:12px;
-color:white;
-}
-
-.add-btn{
-width:100%;
-padding:14px;
-background:#ffb000;
-border:none;
-border-radius:12px;
-font-weight:900;
-margin-top:10px;
-cursor:pointer;
-}
-
-.admin-item{
-background:#202020;
-padding:14px;
-border-radius:14px;
-margin-top:15px;
-}
-
-.admin-item img{
-width:80px;
-height:110px;
-object-fit:cover;
-border-radius:10px;
-margin-bottom:12px;
-}
-
-.actions{
-display:flex;
-gap:10px;
-margin-top:10px;
-}
-
-.save-btn{
-flex:1;
-padding:12px;
-background:#ffb000;
-border:none;
-border-radius:10px;
-font-weight:900;
-cursor:pointer;
-}
-
-.delete-btn{
-flex:1;
-padding:12px;
-background:red;
-color:white;
-border:none;
-border-radius:10px;
-font-weight:900;
-cursor:pointer;
-}
-
-</style>
-
-<button class="admin-toggle" onclick="openAdmin()" title="Administrador">
-⚙
+<button class="admin-toggle" onclick="toggleAdmin()">
+⚙️ ADMIN
 </button>
 
 <div class="admin-panel" id="adminPanel">
 
-<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+<h2>Panel administrador</h2>
 
-<h2 style="margin:0;color:#ffb000;">PANEL ADMIN</h2>
+<div class="admin-help">
+Formato:<br>
+Titulo | Descripción | URL Imagen
+</div>
 
-<button onclick="closeAdmin()" style="
-background:red;
-color:white;
-border:none;
-width:40px;
-height:40px;
-border-radius:50%;
-font-size:20px;
-font-weight:900;
-cursor:pointer;
-">
-✕
+<h3>🎬 TOP Películas</h3>
+<textarea id="editTopMovies"></textarea>
+
+<h3>📺 TOP Series</h3>
+<textarea id="editTopSeries"></textarea>
+
+<h3>🔥 Nuevas Películas</h3>
+<textarea id="editNewMovies"></textarea>
+
+<h3>⭐ Nuevas Series</h3>
+<textarea id="editNewSeries"></textarea>
+
+<button class="save-btn" onclick="saveContent()">
+GUARDAR CAMBIOS
 </button>
 
 </div>
 
-<div class="admin-section">
-
-<h3>🎬 TOP PELÍCULAS</h3>
-
-<input id="topMovies-title" placeholder="Título">
-<input id="topMovies-desc" placeholder="Descripción">
-<input id="topMovies-url" placeholder="URL imagen">
-<input type="file" id="topMovies-file" accept="image/*">
-
-<button class="add-btn" onclick="addItem('topMovies')">
-AÑADIR
-</button>
-
-<div id="admin-topMovies"></div>
-
-</div>
-
-<div class="admin-section">
-
-<h3>📺 TOP SERIES</h3>
-
-<input id="topSeries-title" placeholder="Título">
-<input id="topSeries-desc" placeholder="Descripción">
-<input id="topSeries-url" placeholder="URL imagen">
-<input type="file" id="topSeries-file" accept="image/*">
-
-<button class="add-btn" onclick="addItem('topSeries')">
-AÑADIR
-</button>
-
-<div id="admin-topSeries"></div>
-
-</div>
-
-<div class="admin-section">
-
-<h3>🔥 NOVEDADES PELÍCULAS</h3>
-
-<input id="newMovies-title" placeholder="Título">
-<input id="newMovies-desc" placeholder="Descripción">
-<input id="newMovies-url" placeholder="URL imagen">
-<input type="file" id="newMovies-file" accept="image/*">
-
-<button class="add-btn" onclick="addItem('newMovies')">
-AÑADIR
-</button>
-
-<div id="admin-newMovies"></div>
-
-</div>
-
-<div class="admin-section">
-
-<h3>⭐ NOVEDADES SERIES</h3>
-
-<input id="newSeries-title" placeholder="Título">
-<input id="newSeries-desc" placeholder="Descripción">
-<input id="newSeries-url" placeholder="URL imagen">
-<input type="file" id="newSeries-file" accept="image/*">
-
-<button class="add-btn" onclick="addItem('newSeries')">
-AÑADIR
-</button>
-
-<div id="admin-newSeries"></div>
-
-</div>
-
-</div>
 
 <script>
 
-const ADMIN_PIN = '2990';
+function toggleAdmin(){
+document.getElementById('adminPanel').classList.toggle('active');
+}
 
-let plexData = JSON.parse(localStorage.getItem('plexmaxData')) || {
-topMovies: [],
-topSeries: [],
-newMovies: [],
-newSeries: []
+function listToText(data){
+return data.map(item =>
+`${item.title} | ${item.desc} | ${item.img}`
+).join('\n');
+}
+
+function textToList(text){
+return text.split('\n').filter(Boolean).map(line=>{
+const parts = line.split('|');
+
+return{
+title:(parts[0]||'').trim(),
+desc:(parts[1]||'').trim(),
+img:(parts[2]||'https://picsum.photos/200/300').trim()
 };
-
-function openAdmin(){
-
-const pin = prompt('Introduce PIN administrador');
-
-if(pin === ADMIN_PIN){
-
-document.getElementById('adminPanel').style.display='block';
-renderAll();
-
-}else{
-
-alert('PIN incorrecto');
-
-}
-
-}
-
-function closeAdmin(){
-
-document.getElementById('adminPanel').style.display='none';
-
-}
-
-function saveAll(){
-
-localStorage.setItem('plexmaxData', JSON.stringify(plexData));
-renderAll();
-
-}
-
-function addItem(category){
-
-const title = document.getElementById(category + '-title').value;
-const desc = document.getElementById(category + '-desc').value;
-const url = document.getElementById(category + '-url').value;
-const file = document.getElementById(category + '-file').files[0];
-
-if(!title){
-alert('Añade un título');
-return;
-}
-
-if(file){
-
-const reader = new FileReader();
-
-reader.onload = function(e){
-
-plexData[category].push({
-title:title,
-desc:desc,
-img:e.target.result
 });
+}
 
-saveAll();
+function refreshLists(){
+
+document.getElementById("topMovies").innerHTML='';
+document.getElementById("topSeries").innerHTML='';
+document.getElementById("newMovies").innerHTML='';
+document.getElementById("newSeries").innerHTML='';
+
+renderList("topMovies", topMovies);
+renderList("topSeries", topSeries);
+renderList("newMovies", newMovies);
+renderList("newSeries", newSeries);
 
 }
 
-reader.readAsDataURL(file);
+document.getElementById('editTopMovies').value = listToText(topMovies);
+document.getElementById('editTopSeries').value = listToText(topSeries);
+document.getElementById('editNewMovies').value = listToText(newMovies);
+document.getElementById('editNewSeries').value = listToText(newSeries);
 
-}else{
+function saveContent(){
 
-plexData[category].push({
-title:title,
-desc:desc,
-img:url
-});
+localStorage.setItem('topMovies',
+document.getElementById('editTopMovies').value);
 
-saveAll();
+localStorage.setItem('topSeries',
+document.getElementById('editTopSeries').value);
 
-}
+localStorage.setItem('newMovies',
+document.getElementById('editNewMovies').value);
 
-document.getElementById(category + '-title').value='';
-document.getElementById(category + '-desc').value='';
-document.getElementById(category + '-url').value='';
-document.getElementById(category + '-file').value='';
+localStorage.setItem('newSeries',
+document.getElementById('editNewSeries').value);
 
-}
-
-function updateItem(category,index){
-
-const title = document.getElementById(category + '-edit-title-' + index).value;
-const desc = document.getElementById(category + '-edit-desc-' + index).value;
-const url = document.getElementById(category + '-edit-url-' + index).value;
-const file = document.getElementById(category + '-edit-file-' + index).files[0];
-
-let newPosition = parseInt(
-document.getElementById(category + '-edit-position-' + index).value
+topMovies = textToList(
+document.getElementById('editTopMovies').value
 );
 
-if(isNaN(newPosition)) newPosition = index + 1;
+topSeries = textToList(
+document.getElementById('editTopSeries').value
+);
 
-newPosition = Math.max(1, Math.min(newPosition, plexData[category].length));
+newMovies = textToList(
+document.getElementById('editNewMovies').value
+);
 
-function applyUpdate(imgValue){
+newSeries = textToList(
+document.getElementById('editNewSeries').value
+);
 
-const updatedItem = {
-title:title,
-desc:desc,
-img:imgValue
-};
+refreshLists();
 
-plexData[category].splice(index,1);
-
-plexData[category].splice(newPosition - 1,0,updatedItem);
-
-saveAll();
+alert('Contenido actualizado correctamente');
 
 }
 
-if(file){
+window.addEventListener('load', ()=>{
 
-const reader = new FileReader();
-
-reader.onload = function(e){
-
-applyUpdate(e.target.result);
-
+if(localStorage.getItem('topMovies')){
+topMovies = textToList(localStorage.getItem('topMovies'));
 }
 
-reader.readAsDataURL(file);
-
-}else{
-
-applyUpdate(url);
-
+if(localStorage.getItem('topSeries')){
+topSeries = textToList(localStorage.getItem('topSeries'));
 }
 
+if(localStorage.getItem('newMovies')){
+newMovies = textToList(localStorage.getItem('newMovies'));
 }
 
-function deleteItem(category,index){
-
-plexData[category].splice(index,1);
-saveAll();
-
+if(localStorage.getItem('newSeries')){
+newSeries = textToList(localStorage.getItem('newSeries'));
 }
 
-function renderCategory(category,containerId){
+refreshLists();
 
-const container = document.getElementById(containerId);
-
-if(!container) return;
-
-container.innerHTML='';
-
-plexData[category].forEach((item,index)=>{
-
-container.innerHTML += `
-<div class="top-item">
-
-<div style="
-min-width:42px;
-height:42px;
-border-radius:50%;
-background:#ffb000;
-color:black;
-display:flex;
-align-items:center;
-justify-content:center;
-font-weight:900;
-font-size:18px;
-">
-${index + 1}
-</div>
-
-<img src="${item.img}">
-
-<div>
-<h4>${item.title}</h4>
-<p>${item.desc}</p>
-</div>
-
-</div>
-`;
+document.getElementById('editTopMovies').value = listToText(topMovies);
+document.getElementById('editTopSeries').value = listToText(topSeries);
+document.getElementById('editNewMovies').value = listToText(newMovies);
+document.getElementById('editNewSeries').value = listToText(newSeries);
 
 });
-
-}
-
-function renderAdmin(category,containerId){
-
-const container = document.getElementById(containerId);
-
-container.innerHTML='';
-
-plexData[category].forEach((item,index)=>{
-
-container.innerHTML += `
-<div class="admin-item">
-
-<img src="${item.img}">
-
-<div style="display:flex;gap:10px;align-items:center;margin-bottom:10px;">
-
-<div style="
-width:42px;
-height:42px;
-border-radius:50%;
-background:#ffb000;
-color:black;
-display:flex;
-align-items:center;
-justify-content:center;
-font-weight:900;
-">
-${index + 1}
-</div>
-
-<input 
-type="number" 
-min="1"
-max="5"
-id="${category}-edit-position-${index}" 
-value="${index + 1}"
-style="max-width:90px;"
-placeholder="Posición">
-
-</div>
-
-<input id="${category}-edit-title-${index}" value="${item.title}">
-<input id="${category}-edit-desc-${index}" value="${item.desc}">
-<input id="${category}-edit-url-${index}" value="${item.img}">
-<input type="file" id="${category}-edit-file-${index}" accept="image/*">
-
-<div class="actions">
-
-<button class="save-btn" onclick="updateItem('${category}',${index})">
-GUARDAR
-</button>
-
-<button class="delete-btn" onclick="deleteItem('${category}',${index})">
-ELIMINAR
-</button>
-
-</div>
-
-</div>
-`;
-
-});
-
-}
-
-function renderAll(){
-
-renderCategory('topMovies','topMovies');
-renderCategory('topSeries','topSeries');
-renderCategory('newMovies','newMovies');
-renderCategory('newSeries','newSeries');
-
-renderAdmin('topMovies','admin-topMovies');
-renderAdmin('topSeries','admin-topSeries');
-renderAdmin('newMovies','admin-newMovies');
-renderAdmin('newSeries','admin-newSeries');
-
-}
-
-window.onload = renderAll;
 
 </script>
-
 
 </body>
 </html>
