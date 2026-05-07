@@ -1702,48 +1702,63 @@ console.log("ADMIN PIN ACTIVADO");
 
 
 
-window.firebaseReady = false;
 
-window.waitFirebase = setInterval(()=>{
 
-if(window.db && window.firebaseSet && window.firebaseRef){
 
-window.firebaseReady = true;
-clearInterval(window.waitFirebase);
 
-console.log("Firebase listo");
 
-}
+<script type="module">
 
-},500);
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
-window.addItem = async function(category){
+const firebaseConfig = {
+  apiKey: "AIzaSyBzkNlGUKD2p-O7OYfX8FsDgOeleye0XzE",
+  authDomain: "plexmax-f48d6.firebaseapp.com",
+  databaseURL: "https://plexmax-f48d6-default-rtdb.europe-west1.firebasedatabase.app/",
+  projectId: "plexmax-f48d6",
+  storageBucket: "plexmax-f48d6.firebasestorage.app",
+  messagingSenderId: "469359691442",
+  appId: "1:469359691442:web:efc85c7ad7b7dee3f3abab"
+};
 
-try{
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
 
-if(!window.firebaseReady){
-
-alert("Firebase cargando... espera 2 segundos y vuelve a probar");
-return;
-
-}
-
-const title = document.getElementById(category + "-title")?.value || "";
-const desc = document.getElementById(category + "-desc")?.value || "";
-const url = document.getElementById(category + "-url")?.value || "";
-
-if(title.trim() === ""){
-alert("Añade un título");
-return;
-}
-
-if(!window.plexData){
 window.plexData = {
 topMovies: [],
 topSeries: [],
 newMovies: [],
 newSeries: []
 };
+
+// CARGAR
+onValue(ref(db,"plexmax"), (snapshot)=>{
+
+const data = snapshot.val();
+
+if(data){
+
+window.plexData = data;
+
+console.log("Datos cargados");
+
+}
+
+});
+
+// FUNCION GLOBAL
+window.addItem = async function(category){
+
+try{
+
+const title = document.getElementById(category + "-title").value;
+const desc = document.getElementById(category + "-desc").value;
+const url = document.getElementById(category + "-url").value;
+
+if(title.trim() === ""){
+alert("Añade un título");
+return;
 }
 
 if(!window.plexData[category]){
@@ -1756,32 +1771,46 @@ desc:desc,
 img:url
 });
 
-await window.firebaseSet(
-window.firebaseRef(window.db,"plexmax"),
-window.plexData
-);
+await set(ref(db,"plexmax"), window.plexData);
 
 alert("Contenido añadido correctamente");
-
-// limpiar
-document.getElementById(category + "-title").value = "";
-document.getElementById(category + "-desc").value = "";
-document.getElementById(category + "-url").value = "";
 
 location.reload();
 
 }catch(error){
 
 console.error(error);
-alert("ERROR: " + error.message);
+alert(error.message);
 
 }
 
 }
+
+window.openAdmin = function(){
+
+const pin = prompt("Introduce PIN administrador");
+
+if(pin === "2990"){
+
+document.getElementById("adminPanel").style.display="block";
+
+}else{
+
+alert("PIN incorrecto");
+
+}
+
+}
+
+window.closeAdmin = function(){
+
+document.getElementById("adminPanel").style.display="none";
+
+}
+
+console.log("PLEXMAX FIREBASE OK");
 
 </script>
-
-
 
 </body>
 </html>
