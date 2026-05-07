@@ -928,7 +928,7 @@ renderList("newSeries", newSeries);
 
 window.addEventListener('load', ()=>{
 
-const savedData = localStorage.getItem('plexmax_data');
+const savedData = 
 
 if(!savedData) return;
 
@@ -1133,7 +1133,7 @@ cursor:pointer;
 <input id="topMovies-url" placeholder="URL imagen">
 <input type="file" id="topMovies-file" accept="image/*">
 
-<button class="add-btn" onclick="addItem('topMovies')">
+<button type="button" class="add-btn" onclick="addItem('topMovies')">
 AÑADIR
 </button>
 
@@ -1150,7 +1150,7 @@ AÑADIR
 <input id="topSeries-url" placeholder="URL imagen">
 <input type="file" id="topSeries-file" accept="image/*">
 
-<button class="add-btn" onclick="addItem('topSeries')">
+<button type="button" class="add-btn" onclick="addItem('topSeries')">
 AÑADIR
 </button>
 
@@ -1167,7 +1167,7 @@ AÑADIR
 <input id="newMovies-url" placeholder="URL imagen">
 <input type="file" id="newMovies-file" accept="image/*">
 
-<button class="add-btn" onclick="addItem('newMovies')">
+<button type="button" class="add-btn" onclick="addItem('newMovies')">
 AÑADIR
 </button>
 
@@ -1184,7 +1184,7 @@ AÑADIR
 <input id="newSeries-url" placeholder="URL imagen">
 <input type="file" id="newSeries-file" accept="image/*">
 
-<button class="add-btn" onclick="addItem('newSeries')">
+<button type="button" class="add-btn" onclick="addItem('newSeries')">
 AÑADIR
 </button>
 
@@ -1198,7 +1198,7 @@ AÑADIR
 
 const ADMIN_PIN = '2990';
 
-let plexData = JSON.parse(localStorage.getItem('plexmaxData')) || {
+let plexData = JSON.parse() || {
 topMovies: [],
 topSeries: [],
 newMovies: [],
@@ -1230,7 +1230,7 @@ document.getElementById('adminPanel').style.display='none';
 
 function saveAll(){
 
-localStorage.setItem('plexmaxData', JSON.stringify(plexData));
+);
 renderAll();
 
 }
@@ -1431,11 +1431,11 @@ placeholder="Posición">
 
 <div class="actions">
 
-<button class="save-btn" onclick="updateItem('${category}',${index})">
+<button type="button" class="save-btn" onclick="updateItem('${category}',${index})">
 GUARDAR
 </button>
 
-<button class="delete-btn" onclick="deleteItem('${category}',${index})">
+<button type="button" class="delete-btn" onclick="deleteItem('${category}',${index})">
 ELIMINAR
 </button>
 
@@ -1466,40 +1466,11 @@ window.onload = renderAll;
 
 </script>
 
-<script type="module">
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
-import {
-getDatabase,
-ref,
-set,
-onValue
-}
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyBzkNlGUKD2p-O7OYfX8FsDgOeleye0XzE",
-  authDomain: "plexmax-f48d6.firebaseapp.com",
-  databaseURL: "https://plexmax-f48d6-default-rtdb.europe-west1.firebasedatabase.app/",
-  projectId: "plexmax-f48d6",
-  storageBucket: "plexmax-f48d6.firebasestorage.app",
-  messagingSenderId: "469359691442",
-  appId: "1:469359691442:web:efc85c7ad7b7dee3f3abab"
-};
 
-const app = initializeApp(firebaseConfig);
 
-const db = getDatabase(app);
-
-window.db = db;
-window.ref = ref;
-window.set = set;
-window.onValue = onValue;
-
-console.log("PLEXMAX FIREBASE CONECTADO");
-
-</script>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
@@ -1518,12 +1489,111 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-window.firebaseDB = db;
-window.firebaseRef = ref;
-window.firebaseSet = set;
-window.firebaseOnValue = onValue;
+window.plexData = {
+topMovies: [],
+topSeries: [],
+newMovies: [],
+newSeries: []
+};
 
-console.log("PLEXMAX FIREBASE REALTIME ACTIVADO");
+// CARGAR DATOS REALTIME
+onValue(ref(db,"plexmax"),(snapshot)=>{
+
+const data = snapshot.val();
+
+if(data){
+
+window.plexData = data;
+
+console.log("Datos actualizados");
+
+}
+
+});
+
+// GUARDAR
+function saveAll(){
+
+set(ref(db,"plexmax"),window.plexData);
+
+}
+
+// AÑADIR
+window.addItem = function(category){
+
+const title = document.getElementById(category + "-title")?.value || "";
+const desc = document.getElementById(category + "-desc")?.value || "";
+const url = document.getElementById(category + "-url")?.value || "";
+
+if(title.trim() === ""){
+alert("Añade un título");
+return;
+}
+
+if(!window.plexData[category]){
+window.plexData[category] = [];
+}
+
+window.plexData[category].push({
+title:title,
+desc:desc,
+img:url
+});
+
+saveAll();
+
+alert("Contenido añadido correctamente");
+
+// limpiar
+document.getElementById(category + "-title").value = "";
+document.getElementById(category + "-desc").value = "";
+document.getElementById(category + "-url").value = "";
+
+location.reload();
+
+}
+
+console.log("PLEXMAX FIREBASE FUNCIONANDO");
+
+</script>
+
+
+<script>
+
+window.openAdmin = function(){
+
+const pin = prompt("Introduce PIN administrador");
+
+if(pin === "2990"){
+
+const panel = document.getElementById("adminPanel");
+
+if(panel){
+panel.style.display = "block";
+}else{
+alert("No se encuentra el panel admin");
+}
+
+}else{
+
+alert("PIN incorrecto");
+
+}
+
+}
+
+window.closeAdmin = function(){
+
+const panel = document.getElementById("adminPanel");
+
+if(panel){
+panel.style.display = "none";
+}
+
+}
+
+console.log("ADMIN PIN ACTIVADO");
+
 </script>
 
 </body>
