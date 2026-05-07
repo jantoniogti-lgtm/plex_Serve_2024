@@ -99,6 +99,8 @@ margin-bottom:40px;
 }
 
 .buttons{
+justify-content:center;
+
 display:flex;
 gap:20px;
 flex-wrap:wrap;
@@ -146,27 +148,27 @@ transform:translateY(-8px) scale(1.02);
 }
 
 .poster:nth-child(1){
-background-image:url('https://image.tmdb.org/t/p/w500/qJ2tW6WMUDux911r6m7haRef0WH.jpg');
+background-image:url('https://picsum.photos/400/600?random=1');
 }
 
 .poster:nth-child(2){
-background-image:url('https://image.tmdb.org/t/p/w500/9Gtg2DzBhmYamXBS1hKAhiwbBKS.jpg');
+background-image:url('https://picsum.photos/400/600?random=2');
 }
 
 .poster:nth-child(3){
-background-image:url('https://image.tmdb.org/t/p/w500/7WsyChQLEftFiDOVTGkv3hFpyyt.jpg');
+background-image:url('https://picsum.photos/400/600?random=3');
 }
 
 .poster:nth-child(4){
-background-image:url('https://image.tmdb.org/t/p/w500/k7eYdWvhYQyRQoU2TB2A2Xu2TfD.jpg');
+background-image:url('https://picsum.photos/400/600?random=4');
 }
 
 .poster:nth-child(5){
-background-image:url('https://image.tmdb.org/t/p/w500/5GA3vV1aWWHTSDO5eno8V5zDo8r.jpg');
+background-image:url('https://picsum.photos/400/600?random=5');
 }
 
 .poster:nth-child(6){
-background-image:url('https://image.tmdb.org/t/p/w500/rktDFPbfHfUbArZ6OOOKsXcv0Bm.jpg');
+background-image:url('https://picsum.photos/400/600?random=6');
 }
 
 .section{
@@ -343,6 +345,8 @@ line-height:1.5 !important;
 }
 
 .buttons{
+justify-content:center;
+
 justify-content:center !important;
 }
 
@@ -417,6 +421,14 @@ padding:25px 15px;
 
 }
 
+
+.poster{
+min-height:180px;
+background-repeat:no-repeat !important;
+display:block;
+width:100%;
+}
+
 </style>
 </head>
 
@@ -460,10 +472,6 @@ Actualizado diariamente con nuevos estrenos y novedades.
 </p>
 
 <div class="buttons">
-
-<a href="#solicitudes" class="primary-btn">
-SOLICITAR ACCESO
-</a>
 
 <a href="#novedades" class="secondary-btn">
 VER NOVEDADES
