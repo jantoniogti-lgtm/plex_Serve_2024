@@ -95,7 +95,7 @@ button,input,select,textarea{font-size:16px!important}
 </div>
 
 <div class="card">
-<button onclick="cargarSolicitudes()">🔄 Actualizar</button>
+
 <button onclick="filtroTipo('TODAS')">Todas</button>
 <button onclick="filtroTipo('PELICULA')">Películas</button>
 <button onclick="filtroTipo('SERIE')">Series</button>
@@ -144,7 +144,7 @@ function login(){
  const p=prompt('Contraseña');
  if(p===PASS){
    admin.style.display='block';
-   cargarSolicitudes();
+   cargarSolicitudes(); setInterval(cargarSolicitudes,15000);
  }
 }
 
@@ -177,7 +177,7 @@ async function cargarSolicitudes(){
  const csv=await res.text();
  const filas=csv.trim().split('\n').slice(1);
  let h='';
- let pelisPend=0,pelisHecho=0,seriesPend=0,seriesHecho=0; let documentales=0;
+ let cPelisPend=0,cPelisHecho=0,cSeriesPend=0,cSeriesHecho=0; let documentales=0;
 filas.reverse().forEach((f,i)=>{
    const c=f.split(',');
    const fecha=c[0]||'';
@@ -187,10 +187,10 @@ filas.reverse().forEach((f,i)=>{
 
    if(localStorage.getItem('eliminada_'+i)==='SI') return;
 const completada = localStorage.getItem('crm_'+i);
-if(tipo==='PELICULA' && completada) pelisHecho++;
-if(tipo==='PELICULA' && !completada) pelisPend++;
-if(tipo==='SERIE' && completada) seriesHecho++;
-if(tipo==='SERIE' && !completada) seriesPend++;
+if(tipo==='PELICULA' && completada) cPelisHecho++;
+if(tipo==='PELICULA' && !completada) cPelisPend++;
+if(tipo==='SERIE' && completada) cSeriesHecho++;
+if(tipo==='SERIE' && !completada) cSeriesPend++;
 if(tipo==='DOCUMENTAL') documentales++;
 
    if(filtroActual!=='TODAS' && tipo!==filtroActual) return;
@@ -210,10 +210,10 @@ if(tipo==='DOCUMENTAL') documentales++;
    <td><button onclick="eliminarSolicitud(${i})">🗑️</button></td>
    </tr>`;
  });
- pelisPend.textContent=pelisPend;
-pelisHecho.textContent=pelisHecho;
-seriesPend.textContent=seriesPend;
-seriesHecho.textContent=seriesHecho;
+ document.getElementById('pelisPend').textContent=cPelisPend;
+document.getElementById('pelisHecho').textContent=cPelisHecho;
+document.getElementById('seriesPend').textContent=cSeriesPend;
+document.getElementById('seriesHecho').textContent=cSeriesHecho;
  tb.innerHTML=h;}
 </script>
 
