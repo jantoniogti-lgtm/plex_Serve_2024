@@ -6,10 +6,9 @@
 <title>PLEXMAX V8 ULTIMATE</title>
 <style>
 body{margin:0;font-family:Arial;background:#000;color:#fff}
-.hero{height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;
-background:linear-gradient(rgba(0,0,0,.4),rgba(0,0,0,.85)),
-url('https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?q=80&w=2400&auto=format&fit=crop') center/cover}
-.logo{font-size:120px;font-weight:900;color:#ffb000;text-shadow:0 0 40px #ffb000}
+.hero{height:180px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;
+background:linear-gradient(rgba(0,0,0,.55),rgba(0,0,0,.80)), url('FONDO.png') center center/cover}
+.logo{font-size:80px;font-weight:900;color:#ffb000;text-shadow:0 0 40px #ffb000}
 .wrap{max-width:1400px;margin:auto;padding:20px}
 .card{background:rgba(0,0,0,.75);border:1px solid #ffb000;border-radius:20px;padding:20px;margin:15px 0}
 input,textarea,select,button{width:100%;padding:12px;margin:6px 0;border:none;border-radius:10px}
@@ -29,24 +28,49 @@ th,td{border:1px solid #333;padding:8px}
 .carousel{display:flex;gap:12px;overflow-x:auto;padding:15px 0}
 .movie{min-width:220px;height:320px;border-radius:16px;background:linear-gradient(135deg,#222,#111);display:flex;align-items:end;padding:15px;font-weight:bold;border:1px solid #ffb000}
 </style>
+
+<style>
+@media (max-width:768px){
+.logo{font-size:60px!important}
+.hero{height:55vh!important;padding:20px}
+.hero h1{font-size:26px}
+.hero p{font-size:14px}
+.wrap{padding:10px!important}
+.grid{grid-template-columns:1fr 1fr!important}
+.card{padding:12px!important;margin:8px 0!important}
+table{display:block;overflow-x:auto;white-space:nowrap;font-size:12px}
+button,input,select,textarea{font-size:16px!important}
+.topbar h3{font-size:16px}
+}
+</style>
+
+<style>
+@media (max-width:768px){
+  .topbar{padding:10px!important}
+  .logo{font-size:48px!important}
+  .hero{height:40vh!important;min-height:300px!important}
+  .hero h1{font-size:22px!important;margin:5px 0}
+  .hero p{font-size:13px!important}
+  .grid{grid-template-columns:1fr!important}
+  .stat{padding:10px!important}
+  .num{font-size:24px!important}
+  .card{border-radius:14px!important}
+  table,thead,tbody,tr,td,th{font-size:11px!important}
+}
+</style>
 </head>
-<body><div class='topbar'><h3>🎬 PLEXMAX CINEMA</h3></div>
+<body>
 
 <div class="hero">
 <div class="logo">PLEXMAX</div>
-<h1>ULTIMATE STREAMING PLATFORM</h1>
-<p>Solicita películas y series de forma profesional</p>
+
+
 </div>
 
 
-<div class="wrap">
-<h2 style="color:#ffb000">🔥 Top Solicitudes</h2>
-<div class="carousel">
-<div class="movie">Acción</div>
-<div class="movie">Series Premium</div>
-<div class="movie">Estrenos</div>
-<div class="movie">Infantil</div>
-<div class="movie">Documentales</div>
+<div class="wrap" style="margin-top:-10px">
+
+
 </div>
 
 <div class="card">
@@ -74,12 +98,12 @@ th,td{border:1px solid #333;padding:8px}
 <button onclick="filtroTipo('TODAS')">Todas</button>
 <button onclick="filtroTipo('PELICULA')">Películas</button>
 <button onclick="filtroTipo('SERIE')">Series</button>
-<button onclick="filtroTipo('DOCUMENTAL')">Documentales</button>
+<button onclick="filtroTipo('DOCUMENTAL')"></button>
 </div>
 
 <div class="card">
 <table>
-<thead><tr><th>Fecha</th><th>Solicitud</th><th>Solicitante</th><th>Tipo</th><th>Estado</th><th>Acción</th></tr></thead>
+<thead><tr><th>Fecha</th><th>Solicitud</th><th>Solicitante</th><th>Tipo</th><th>Estado</th><th></th></tr></thead>
 <tbody id="tb"></tbody>
 </table>
 </div>
