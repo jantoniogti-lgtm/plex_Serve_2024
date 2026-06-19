@@ -88,7 +88,7 @@ button,input,select,textarea{font-size:16px!important}
 
 <div id="admin" class="admin">
 <div class="grid">
-<div class="stat"><div class="num" id="t1">0</div>Total</div>
+<div class="stat"><div class="num" id="series">0</div>Series</div>
 <div class="stat"><div class="num" id="t2">0</div>Pendientes</div>
 <div class="stat"><div class="num" id="pelis">0</div>Películas</div>
 <div class="stat"><div class="num" id="t4">0</div>Completadas</div>
@@ -99,7 +99,7 @@ button,input,select,textarea{font-size:16px!important}
 <button onclick="filtroTipo('TODAS')">Todas</button>
 <button onclick="filtroTipo('PELICULA')">Películas</button>
 <button onclick="filtroTipo('SERIE')">Series</button>
-<button onclick="filtroTipo('DOCUMENTAL')"></button>
+<button onclick="filtroTipo('DOCUMENTAL')">Documentales</button>
 </div>
 
 <div class="card">
@@ -149,6 +149,12 @@ function login(){
 }
 
 
+
+function eliminarSolicitud(id){
+ localStorage.setItem('eliminada_'+id,'SI');
+ cargarSolicitudes();
+}
+
 let filtroActual='TODAS';
 
 function filtroTipo(tipo){
@@ -171,7 +177,7 @@ async function cargarSolicitudes(){
  const csv=await res.text();
  const filas=csv.trim().split('\n').slice(1);
  let h='';
- let peliculas=0;
+ let peliculas=0; let seriesCount=0; let documentales=0;
 filas.reverse().forEach((f,i)=>{
    const c=f.split(',');
    const fecha=c[0]||'';
@@ -180,6 +186,9 @@ filas.reverse().forEach((f,i)=>{
    const tipo=(c[3]||'').trim().toUpperCase();
 
    if(tipo==='PELICULA') peliculas++;
+if(tipo==='SERIE') seriesCount++;
+if(tipo==='DOCUMENTAL') documentales++;
+if(localStorage.getItem('eliminada_'+i)==='SI') return;
 
    if(filtroActual!=='TODAS' && tipo!==filtroActual) return;
 
@@ -195,9 +204,10 @@ filas.reverse().forEach((f,i)=>{
       ? `<button onclick="completar(${i})">✅</button>`
       : `<button onclick="reabrir(${i})">↩️</button>`}
    </td>
+   <td><button onclick="eliminarSolicitud(${i})">🗑️</button></td>
    </tr>`;
  });
- pelis.textContent=peliculas;
+ pelis.textContent=peliculas; if(document.getElementById('series')) series.textContent=seriesCount;
  tb.innerHTML=h;
  t1.textContent=filas.length;
  t2.textContent=filas.length;
