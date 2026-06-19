@@ -88,10 +88,10 @@ button,input,select,textarea{font-size:16px!important}
 
 <div id="admin" class="admin">
 <div class="grid">
-<div class="stat"><div class="num" id="series">0</div>Series</div>
-<div class="stat"><div class="num" id="t2">0</div>Pendientes</div>
-<div class="stat"><div class="num" id="pelis">0</div>Películas</div>
-<div class="stat"><div class="num" id="t4">0</div>Completadas</div>
+<div class="stat"><div class="num" id="pelisPend">0</div>Películas Pend.</div>
+<div class="stat"><div class="num" id="pelisHecho">0</div>Películas Hechas</div>
+<div class="stat"><div class="num" id="seriesPend">0</div>Series Pend.</div>
+<div class="stat"><div class="num" id="seriesHecho">0</div>Series Hechas</div>
 </div>
 
 <div class="card">
@@ -177,7 +177,7 @@ async function cargarSolicitudes(){
  const csv=await res.text();
  const filas=csv.trim().split('\n').slice(1);
  let h='';
- let peliculas=0; let seriesCount=0; let documentales=0;
+ let pelisPend=0,pelisHecho=0,seriesPend=0,seriesHecho=0; let documentales=0;
 filas.reverse().forEach((f,i)=>{
    const c=f.split(',');
    const fecha=c[0]||'';
@@ -185,10 +185,13 @@ filas.reverse().forEach((f,i)=>{
    const nombre=c[2]||'';
    const tipo=(c[3]||'').trim().toUpperCase();
 
-   if(tipo==='PELICULA') peliculas++;
-if(tipo==='SERIE') seriesCount++;
+   if(localStorage.getItem('eliminada_'+i)==='SI') return;
+const completada = localStorage.getItem('crm_'+i);
+if(tipo==='PELICULA' && completada) pelisHecho++;
+if(tipo==='PELICULA' && !completada) pelisPend++;
+if(tipo==='SERIE' && completada) seriesHecho++;
+if(tipo==='SERIE' && !completada) seriesPend++;
 if(tipo==='DOCUMENTAL') documentales++;
-if(localStorage.getItem('eliminada_'+i)==='SI') return;
 
    if(filtroActual!=='TODAS' && tipo!==filtroActual) return;
 
@@ -207,13 +210,11 @@ if(localStorage.getItem('eliminada_'+i)==='SI') return;
    <td><button onclick="eliminarSolicitud(${i})">🗑️</button></td>
    </tr>`;
  });
- pelis.textContent=peliculas; if(document.getElementById('series')) series.textContent=seriesCount;
- tb.innerHTML=h;
- t1.textContent=filas.length;
- t2.textContent=filas.length;
- 
- t4.textContent=Object.keys(localStorage).filter(k=>k.startsWith('crm_')).length;
-}
+ pelisPend.textContent=pelisPend;
+pelisHecho.textContent=pelisHecho;
+seriesPend.textContent=seriesPend;
+seriesHecho.textContent=seriesHecho;
+ tb.innerHTML=h;}
 </script>
 
 </body>
