@@ -21,8 +21,16 @@ button{background:#ffb000;font-weight:bold}
 table{width:100%;border-collapse:collapse}
 th,td{border:1px solid #333;padding:8px}
 </style>
+
+<style>
+.topbar{position:fixed;top:0;left:0;right:0;background:rgba(0,0,0,.85);backdrop-filter:blur(10px);padding:12px 20px;z-index:999}
+.topbar h3{margin:0;color:#ffb000}
+.hero video{position:absolute}
+.carousel{display:flex;gap:12px;overflow-x:auto;padding:15px 0}
+.movie{min-width:220px;height:320px;border-radius:16px;background:linear-gradient(135deg,#222,#111);display:flex;align-items:end;padding:15px;font-weight:bold;border:1px solid #ffb000}
+</style>
 </head>
-<body>
+<body><div class='topbar'><h3>🎬 PLEXMAX CINEMA</h3></div>
 
 <div class="hero">
 <div class="logo">PLEXMAX</div>
@@ -30,7 +38,17 @@ th,td{border:1px solid #333;padding:8px}
 <p>Solicita películas y series de forma profesional</p>
 </div>
 
+
 <div class="wrap">
+<h2 style="color:#ffb000">🔥 Top Solicitudes</h2>
+<div class="carousel">
+<div class="movie">Acción</div>
+<div class="movie">Series Premium</div>
+<div class="movie">Estrenos</div>
+<div class="movie">Infantil</div>
+<div class="movie">Documentales</div>
+</div>
+
 <div class="card">
 <h2>Nueva Solicitud</h2>
 <input id="nombre" placeholder="Nombre">
@@ -47,17 +65,21 @@ th,td{border:1px solid #333;padding:8px}
 <div class="grid">
 <div class="stat"><div class="num" id="t1">0</div>Total</div>
 <div class="stat"><div class="num" id="t2">0</div>Pendientes</div>
-<div class="stat"><div class="num" id="t3">0</div>Proceso</div>
+<div class="stat"><div class="num" id="pelis">0</div>Películas</div>
 <div class="stat"><div class="num" id="t4">0</div>Completadas</div>
 </div>
 
 <div class="card">
 <button onclick="cargarSolicitudes()">🔄 Actualizar</button>
+<button onclick="filtroTipo('TODAS')">Todas</button>
+<button onclick="filtroTipo('PELICULA')">Películas</button>
+<button onclick="filtroTipo('SERIE')">Series</button>
+<button onclick="filtroTipo('DOCUMENTAL')">Documentales</button>
 </div>
 
 <div class="card">
 <table>
-<thead><tr><th>Fecha</th><th>Nombre</th><th>Solicitud</th></tr></thead>
+<thead><tr><th>Fecha</th><th>Solicitud</th><th>Solicitante</th><th>Tipo</th><th>Estado</th><th>Acción</th></tr></thead>
 <tbody id="tb"></tbody>
 </table>
 </div>
@@ -84,20 +106,61 @@ function login(){
  }
 }
 
+
+let filtroActual='TODAS';
+
+function filtroTipo(tipo){
+ filtroActual=tipo;
+ cargarSolicitudes();
+}
+
+function completar(id){
+ localStorage.setItem('crm_'+id,'COMPLETADA');
+ cargarSolicitudes();
+}
+
+function reabrir(id){
+ localStorage.removeItem('crm_'+id);
+ cargarSolicitudes();
+}
+
 async function cargarSolicitudes(){
  const res=await fetch(CSV_URL);
  const csv=await res.text();
  const filas=csv.trim().split('\n').slice(1);
  let h='';
- filas.reverse().forEach(f=>{
+ let peliculas=0;
+filas.reverse().forEach((f,i)=>{
    const c=f.split(',');
-   h += `<tr><td>${c[0]||''}</td><td>${c[1]||''}</td><td>${c[2]||''}</td></tr>`;
+   const fecha=c[0]||'';
+   const solicitud=c[1]||'';
+   const nombre=c[2]||'';
+   const tipo=(c[3]||'').trim().toUpperCase();
+
+   if(tipo==='PELICULA') peliculas++;
+
+   if(filtroActual!=='TODAS' && tipo!==filtroActual) return;
+
+   const estado=localStorage.getItem('crm_'+i)?'COMPLETADA':'PENDIENTE';
+
+   h += `<tr>
+   <td>${fecha}</td>
+   <td>${solicitud}</td>
+   <td>${nombre}</td>
+   <td>${tipo||'-'}</td>
+   <td>${estado}</td>
+   <td>${estado==='PENDIENTE'
+      ? `<button onclick="completar(${i})">✅</button>`
+      : `<button onclick="reabrir(${i})">↩️</button>`}
+   </td>
+   </tr>`;
  });
+ pelis.textContent=peliculas;
  tb.innerHTML=h;
  t1.textContent=filas.length;
  t2.textContent=filas.length;
- t3.textContent=0;
- t4.textContent=0;
+ 
+ t4.textContent=Object.keys(localStorage).filter(k=>k.startsWith('crm_')).length;
 }
 </script>
 
