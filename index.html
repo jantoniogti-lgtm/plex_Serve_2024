@@ -1,84 +1,47 @@
-<!DOCTYPE html><html lang="es"><head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>PLEXMAX_V8_ESTABLE</title>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PLEXMAX V8 ULTIMATE</title>
 <style>
-body{
-margin:0;
-color:#fff;
-font-family:Arial;
-background:
-linear-gradient(rgba(0,0,0,.03),rgba(0,0,0,.12)),
-url('https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?q=80&w=1920&auto=format&fit=crop');
-background-size:cover;
-background-position:center;
-background-attachment:fixed;
-background-repeat:no-repeat;
-}
-:root{--gold:#ffb000;}
-.hero{
-padding:100px 20px;
-text-align:center;
-background:
-linear-gradient(rgba(0,0,0,.05),rgba(0,0,0,.15)),
-url('https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?q=80&w=1920&auto=format&fit=crop') center/cover;
-}
-
-.logo{
-font-size:70px;
-color:#ffb000;
-font-weight:900;
-text-shadow:0 0 20px rgba(255,176,0,.8),0 0 40px rgba(255,176,0,.5);
-}
-.wrap{max-width:1400px;margin:auto;padding:15px}
-.card{
-background:rgba(10,10,10,.20);
-backdrop-filter:blur(10px);
-border:1px solid rgba(255,176,0,.15);
-padding:18px;
-border-radius:24px;
-margin:12px 0;
-box-shadow:0 10px 30px rgba(0,0,0,.4);
-}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
-.stat{background:#1b1b1b;padding:15px;border-radius:12px;text-align:center}
+body{margin:0;font-family:Arial;background:#000;color:#fff}
+.hero{height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;
+background:linear-gradient(rgba(0,0,0,.4),rgba(0,0,0,.85)),
+url('https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?q=80&w=2400&auto=format&fit=crop') center/cover}
+.logo{font-size:120px;font-weight:900;color:#ffb000;text-shadow:0 0 40px #ffb000}
+.wrap{max-width:1400px;margin:auto;padding:20px}
+.card{background:rgba(0,0,0,.75);border:1px solid #ffb000;border-radius:20px;padding:20px;margin:15px 0}
+input,textarea,select,button{width:100%;padding:12px;margin:6px 0;border:none;border-radius:10px}
+button{background:#ffb000;font-weight:bold}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.stat{background:#111;padding:15px;border-radius:15px;text-align:center}
 .num{font-size:32px;color:#ffb000;font-weight:900}
-input,textarea,select,button{width:100%;padding:12px;margin:5px 0;border:none;border-radius:10px}
-button{
-background:#ffb000;
-font-weight:bold;
-transition:.25s;
-cursor:pointer;
-}
-button:hover{
-transform:translateY(-2px);
-box-shadow:0 8px 25px rgba(255,176,0,.35);
-}
-.admin{display:none} table{width:100%;border-collapse:collapse} th,td{border:1px solid #333;padding:8px}
-.notice{
-display:none;
-position:fixed;
-top:20px;
-right:20px;
-background:#151515;
-border-left:4px solid #ffb000;
-padding:14px;
-border-radius:10px;
-z-index:9999;
-}
-</style></head><body>
-<div class="hero"></div>
+.admin{display:none}
+table{width:100%;border-collapse:collapse}
+th,td{border:1px solid #333;padding:8px}
+</style>
+</head>
+<body>
+
+<div class="hero">
+<div class="logo">PLEXMAX</div>
+<h1>ULTIMATE STREAMING PLATFORM</h1>
+<p>Solicita películas y series de forma profesional</p>
+</div>
 
 <div class="wrap">
 <div class="card">
-<div id="ok" class="notice">✅ Solicitud enviada correctamente</div>
-<h2>Nueva solicitud</h2>
+<h2>Nueva Solicitud</h2>
 <input id="nombre" placeholder="Nombre">
 <select id="categoria"><option>Película</option><option>Serie</option></select>
 <textarea id="contenido" placeholder="Contenido solicitado"></textarea>
 <button onclick="enviar()">Enviar solicitud</button>
 </div>
 
-
+<div class="card">
+<button onclick="login()">🔒 Abrir Panel Admin</button>
+</div>
 
 <div id="admin" class="admin">
 <div class="grid">
@@ -89,59 +52,36 @@ z-index:9999;
 </div>
 
 <div class="card">
-<input id="buscar" placeholder="Buscar..." onkeyup="render()">
-
-
-
+<button onclick="cargarSolicitudes()">🔄 Actualizar</button>
 </div>
 
 <div class="card">
 <table>
-<thead><tr><th>Fecha</th><th>Nombre</th><th>Cat.</th><th>Solicitud</th><th>Estado</th><th>Acción</th></tr></thead>
+<thead><tr><th>Fecha</th><th>Nombre</th><th>Solicitud</th></tr></thead>
 <tbody id="tb"></tbody>
 </table>
 </div>
 </div>
-
 </div>
-
-<footer style="text-align:center;padding:25px;color:#999">
-PLEXMAX 2026 &nbsp;&nbsp;
-<span onclick="document.getElementById('loginModal').style.display='block'" style="cursor:pointer">🔒</span>
-</footer>
-
-<div id="loginModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:999">
-<div style="max-width:350px;margin:15vh auto;background:#111;padding:20px;border-radius:16px">
-<h3>Acceso administrador</h3>
-<input id="pass" type="password" placeholder="Contraseña">
-<button onclick="login()">Entrar</button>
-<button onclick="document.getElementById('loginModal').style.display='none'">Cancelar</button>
-</div>
-</div>
-
 
 <script>
 const PASS='2990';
 const CSV_URL='https://docs.google.com/spreadsheets/d/e/2PACX-1vSpkjq9f2qd79pEJVPFaSsoTegUndkPCPCOV2KdA88kh1lkc5k5fTtOqgxTZivIQ_0yxZyRxbIZJHl-/pub?gid=740415843&single=true&output=csv';
 
 async function enviar(){
-if(!nombre.value||!contenido.value) return alert('Completa los campos');
-const fd=new FormData();
-fd.append('entry.160243918',nombre.value);
-fd.append('entry.85519895',contenido.value);
-await fetch('https://docs.google.com/forms/d/e/1FAIpQLSexqG8wynWrNlUAhBH4UBH7MOmjUKk5XYc5e8Dyhf0EzVH0yQ/formResponse',{method:'POST',mode:'no-cors',body:fd});
-nombre.value='';
-contenido.value='';
-ok.style.display='block';
-setTimeout(()=>ok.style.display='none',3000);
+ const fd=new FormData();
+ fd.append('entry.160243918',nombre.value);
+ fd.append('entry.85519895',contenido.value);
+ await fetch('https://docs.google.com/forms/d/e/1FAIpQLSexqG8wynWrNlUAhBH4UBH7MOmjUKk5XYc5e8Dyhf0EzVH0yQ/formResponse',{method:'POST',mode:'no-cors',body:fd});
+ alert('Solicitud enviada');
 }
 
 function login(){
- if(pass.value===PASS){
+ const p=prompt('Contraseña');
+ if(p===PASS){
    admin.style.display='block';
    cargarSolicitudes();
-   document.getElementById('loginModal').style.display='none';
- } else alert('Contraseña incorrecta');
+ }
 }
 
 async function cargarSolicitudes(){
@@ -151,15 +91,15 @@ async function cargarSolicitudes(){
  let h='';
  filas.reverse().forEach(f=>{
    const c=f.split(',');
-   h+=`<tr><td>${c[0]||''}</td><td>${c[1]||''}</td><td>-</td><td>${c[2]||''}</td><td>Recibida</td><td>✔</td></tr>`;
+   h += `<tr><td>${c[0]||''}</td><td>${c[1]||''}</td><td>${c[2]||''}</td></tr>`;
  });
  tb.innerHTML=h;
  t1.textContent=filas.length;
  t2.textContent=filas.length;
- t3.textContent='0';
- t4.textContent='0';
+ t3.textContent=0;
+ t4.textContent=0;
 }
-
-function render(){cargarSolicitudes();}
 </script>
-</body></html>
+
+</body>
+</html>
