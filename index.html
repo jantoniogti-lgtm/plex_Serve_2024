@@ -6,9 +6,10 @@
 <title>PLEXMAX V8 ULTIMATE</title>
 <style>
 body{margin:0;font-family:Arial;background:#000;color:#fff}
-.hero{height:180px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;
-background:linear-gradient(rgba(0,0,0,.55),rgba(0,0,0,.80)), url('FONDO.png') center center/cover}
-.logo{font-size:80px;font-weight:900;color:#ffb000;text-shadow:0 0 40px #ffb000}
+.hero{height:28vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;
+background:linear-gradient(rgba(0,0,0,.4),rgba(0,0,0,.85)),
+url('https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?q=80&w=2400&auto=format&fit=crop') center/cover}
+.logo{font-size:70px;font-weight:900;color:#ffb000;text-shadow:0 0 40px #ffb000}
 .wrap{max-width:1400px;margin:auto;padding:20px}
 .card{background:rgba(0,0,0,.75);border:1px solid #ffb000;border-radius:20px;padding:20px;margin:15px 0}
 input,textarea,select,button{width:100%;padding:12px;margin:6px 0;border:none;border-radius:10px}
@@ -76,7 +77,7 @@ button,input,select,textarea{font-size:16px!important}
 <div class="card">
 <h2>Nueva Solicitud</h2>
 <input id="nombre" placeholder="Nombre">
-<select id="categoria"><option>Película</option><option>Serie</option></select>
+<select id="categoria"><option>PELICULA</option><option>SERIE</option><option>DOCUMENTAL</option></select>
 <textarea id="contenido" placeholder="Contenido solicitado"></textarea>
 <button onclick="enviar()">Enviar solicitud</button>
 </div>
@@ -115,11 +116,28 @@ const PASS='2990';
 const CSV_URL='https://docs.google.com/spreadsheets/d/e/2PACX-1vSpkjq9f2qd79pEJVPFaSsoTegUndkPCPCOV2KdA88kh1lkc5k5fTtOqgxTZivIQ_0yxZyRxbIZJHl-/pub?gid=740415843&single=true&output=csv';
 
 async function enviar(){
- const fd=new FormData();
- fd.append('entry.160243918',nombre.value);
- fd.append('entry.85519895',contenido.value);
- await fetch('https://docs.google.com/forms/d/e/1FAIpQLSexqG8wynWrNlUAhBH4UBH7MOmjUKk5XYc5e8Dyhf0EzVH0yQ/formResponse',{method:'POST',mode:'no-cors',body:fd});
- alert('Solicitud enviada');
+
+ if(!nombre.value || !contenido.value){
+   alert('Completa todos los campos');
+   return;
+ }
+
+ const fd = new FormData();
+
+ fd.append('entry.85519895', contenido.value);
+ fd.append('entry.1498068154', categoria.value.toUpperCase());
+ fd.append('entry.160243918', nombre.value);
+
+ await fetch('https://docs.google.com/forms/d/e/1FAIpQLSexqG8wynWrNlUAhBH4UBH7MOmjUKk5XYc5e8Dyhf0EzVH0yQ/formResponse',{
+   method:'POST',
+   mode:'no-cors',
+   body:fd
+ });
+
+ nombre.value='';
+ contenido.value='';
+
+ alert('✅ Solicitud enviada correctamente');
 }
 
 function login(){
